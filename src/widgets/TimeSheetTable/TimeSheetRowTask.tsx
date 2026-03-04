@@ -46,9 +46,15 @@ export default function TimeSheetRowTask({
         <td className="border-b border-r border-slate-300 sticky left-0 bg-white p-2 pl-8  border-l border-slate-300">
           <div className="flex justify-between gap-1 items-center">
             {task.Title}{" "}
-            <button title = "" className="px-1 py-1  rounded-md bg-white hover:bg-gray-100">
+            <button
+              title=""
+              className="px-1 py-1  rounded-md bg-white hover:bg-gray-100"
+            >
               {"\u22EE"}
             </button>
+
+
+        
           </div>
         </td>
 

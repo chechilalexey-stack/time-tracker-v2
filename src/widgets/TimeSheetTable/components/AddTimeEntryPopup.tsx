@@ -35,7 +35,11 @@ export default function AddTimeEntryPopup({
     parentWidth,
     parentHeight,
   );*/
-
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (isSaving) return; // если уже идёт сохранение, игнорируем повторный клик
@@ -58,13 +62,12 @@ export default function AddTimeEntryPopup({
     );
   return (
     <div
-      className="fixed inset-0 bg-black flex items-center justify-center z-40"
+      className="fixed inset-0 bg-black flex items-center justify-center z-40 animate-fadeIn"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
-      onClick={onClose} // клик на фон закрывает Popup
+      onMouseDown={handleBackgroundClick} // клик на фон закрывает Popup
     >
       <div
         ref={divRef}
-        onClick={(e) => e.stopPropagation()}
         style={{
           position: "fixed",
           top: "50%",
@@ -72,7 +75,7 @@ export default function AddTimeEntryPopup({
           transform: "translate(-50%, -60%)",
           zIndex: 50,
         }}
-        className="bg-white border border-slate-300 shadow-lg rounded-xl w-200 p-4 flex flex-col gap-3 transition-all duration-150"
+        className="bg-white border border-slate-300 shadow-lg rounded-xl w-200 p-4 flex flex-col gap-3 transition-all duration-15 "
       >
         {/* Заголовок */}
         <div className="mb-2">
