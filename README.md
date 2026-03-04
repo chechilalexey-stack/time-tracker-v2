@@ -1,73 +1,193 @@
-# React + TypeScript + Vite
+# 🕒 Time Tracker App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Time Tracker Screenshot](docs/screenshot.png)
 
-Currently, two official plugins are available:
+**Time Tracker** — веб-приложение для учета рабочего времени сотрудников с интерактивной таблицей проектов и задач.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Основные возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- ✅ Просмотр назначенных проектов и задач
+- ✅ Внесение часов и комментариев
+- ✅ Подсветка текущего дня и выходных
+- ✅ Sticky header таблицы при прокрутке
+- ✅ Hover подсказки и гайдлайны на ячейках
+- ✅ Автоматическое суммирование часов по дням и месяцу
+- ✅ Уведомления через Toast (`react-toastify`)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🧩 Технологии
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React 18+**, **TypeScript**
+- **TailwindCSS** для стилизации
+- **React Toastify** для уведомлений
+- **Power Apps & MS Graph API** для данных пользователя
+- **OData фильтры** для запросов проектов и часов
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📂 Структура проекта
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+
+# 🕒 Time Tracker App
+
+![Time Tracker Screenshot](docs/screenshot.png)
+
+**Time Tracker** — веб-приложение для учета рабочего времени сотрудников с интерактивной таблицей проектов и задач.
+
+---
+
+## 🚀 Основные возможности
+
+- ✅ Просмотр назначенных проектов и задач
+- ✅ Внесение часов и комментариев
+- ✅ Подсветка текущего дня и выходных
+- ✅ Sticky header таблицы при прокрутке
+- ✅ Hover подсказки и гайдлайны на ячейках
+- ✅ Автоматическое суммирование часов по дням и месяцу
+- ✅ Уведомления через Toast (`react-toastify`)
+
+---
+
+## 🧩 Технологии
+
+- **React 18+**, **TypeScript**
+- **TailwindCSS** для стилизации
+- **React Toastify** для уведомлений
+- **Power Apps & MS Graph API** для данных пользователя
+- **OData фильтры** для запросов проектов и часов
+
+---
+
+## 📂 Структура проекта
+
+New folder/
+│ .gitattributes
+│ .gitignore
+│ all_files.txt
+│ eslint.config.js
+│ index.html
+│ new 12.bat
+│ package-lock.json
+│ package.json
+│ postcss.config.cjs
+│ power.config.json
+│ README.md
+│ tailwind.config.js
+│ tsconfig.app.json
+│ tsconfig.json
+│ tsconfig.node.json
+│ vite.config.ts
+│
+├─public/
+│ site-icon-TS.svg
+│
+└─src/
+│ App.tsx
+│ index.css
+│ main.tsx
+│
+├─assets/
+│ react.svg
+│
+├─constants/
+│ table.ts
+│
+├─generated/
+│ index.ts
+│
+├─generated/models/
+│ CommonModels.ts
+│ Office365UsersModel.ts
+│ Projects_assignmentModel.ts
+│ Projects_codeModel.ts
+│ TasksModel.ts
+│ TimeEntriesModel.ts
+│
+├─generated/services/
+│ Office365UsersService.ts
+│ Projects_assignmentService.ts
+│ Projects_codeService.ts
+│ TasksService.ts
+│ TimeEntriesService.ts
+│
+├─pages/
+│ TimeSheetPage/TimeSheetPage.tsx
+│
+├─shared/
+│ ├─api/
+│ │ useGetTimeEnries.ts
+│ │ useSaveData.ts
+│ │ useTimeSheetData.ts
+│ │ useTimeSheetDataBackUp.ts
+│ │ useUser.ts
+│ │
+│ ├─hooks/
+│ │ useTimeEntries.ts
+│ │
+│ ├─sceletonLoading/
+│ │ LoaderTable.tsx
+│ │
+│ ├─types/
+│ │ sharedtypes.ts
+│ │
+│ └─utils/
+│ calculateCoordinates.ts
+│ GetDate.ts
+│
+└─widgets/
+├─Footer/Footer.tsx
+├─Header/Header.tsx
+└─TimeSheetTable/
+TimeSheetRowTask.tsx
+TimeSheetTable.tsx
+timsSheetRowProject.tsx
+└─components/
+AddTimeEntryPopup.tsx
+HoverCellPopup.tsx
+HoverGuidlines.tsx
+MonthYearSwitch.tsx
+
+## 📄 Краткое описание файлов
+
+| Путь | Назначение |
+|------|------------|
+| `src/App.tsx` | Главный компонент приложения. Подключает Header, Footer, TimeSheetPage, ToastContainer |
+| `src/main.tsx` | Точка входа в приложение (React + Vite) |
+| `src/index.css` | Глобальные стили, Tailwind |
+| `src/constants/table.ts` | Константы и конфигурации таблицы таймшита |
+| `src/generated/models/*.ts` | Типы моделей данных (Tasks, Projects, Users, TimeEntries) |
+| `src/generated/services/*.ts` | Сервисы для работы с API (OData) |
+| `src/pages/TimeSheetPage/TimeSheetPage.tsx` | Страница таймшита, оборачивает TimeSheetTable |
+| `src/shared/api/useTimeSheetData.ts` | Хук для загрузки и обработки данных таймшита |
+| `src/shared/api/useSaveData.ts` | Хук для сохранения введенных часов |
+| `src/shared/api/useUser.ts` | Хук для получения информации о пользователе |
+| `src/shared/hooks/useTimeEntries.ts` | Хук для работы с TimeEntries в UI |
+| `src/shared/utils/GetDate.ts` | Утилита для получения дней месяца с днями недели |
+| `src/shared/utils/calculateCoordinates.ts` | Утилита для вычисления координат курсора в таблице |
+| `src/shared/types/sharedtypes.ts` | Общие типы и интерфейсы (PopupData, days и др.) |
+| `src/widgets/Header/Header.tsx` | Компонент шапки приложения, отображение пользователя |
+| `src/widgets/Footer/Footer.tsx` | Компонент подвала |
+| `src/widgets/TimeSheetTable/TimeSheetTable.tsx` | Основная таблица таймшита, объединяет строки и попапы |
+| `src/widgets/TimeSheetTable/TimeSheetRowTask.tsx` | Компонент строки задачи |
+| `src/widgets/TimeSheetTable/timsSheetRowProject.tsx` | Компонент строки проекта (группировка задач) |
+| `src/widgets/TimeSheetTable/components/AddTimeEntryPopup.tsx` | Попап для добавления часов |
+| `src/widgets/TimeSheetTable/components/HoverCellPopup.tsx` | Подсказка при наведении на ячейку |
+| `src/widgets/TimeSheetTable/components/HoverGuidlines.tsx` | Вертикальные и горизонтальные гайдлайны при наведении |
+| `src/widgets/TimeSheetTable/components/MonthYearSwitch.tsx` | Компонент переключения месяца/года |
+
+### 🔹 Как это выглядит логически
+
+- **App.tsx** — основной контейнер приложения  
+- **pages/TimeSheetPage** — страница таймшита  
+- **widgets/Header, Footer** — шапка и футер  
+- **widgets/TimeSheetTable** — вся логика таблицы и её строки  
+- **shared/api** — функции работы с данными (API)  
+- **shared/hooks** — кастомные React-хуки  
+- **shared/utils** — утилиты, например, для расчета координат и дней месяца  
+- **generated/** — сгенерированные модели и сервисы OData  
+
