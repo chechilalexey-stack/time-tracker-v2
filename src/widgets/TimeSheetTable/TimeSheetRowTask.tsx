@@ -44,17 +44,19 @@ export default function TimeSheetRowTask({
     <>
       <tr className="bg-white ">
         <td className="border-b border-r border-slate-300 sticky left-0 bg-white p-2 pl-8  border-l border-slate-300">
-          {task.Title}
+          <div className="flex justify-between gap-1 items-center">
+            {task.Title}{" "}
+            <button title = "" className="px-1 py-1  rounded-md bg-white hover:bg-gray-100">
+              {"\u22EE"}
+            </button>
+          </div>
         </td>
 
         {days.map((day) => {
           const hours = entriesMap.get(`${task.ID}-${day.date}`) || 0;
 
           const additionalClass =
-            hours === 0
-              ? " text-gray-300"
-           
-                : " text-gray-800";
+            hours === 0 ? " text-gray-300" : " text-gray-800";
           return (
             <td
               key={day.day}
