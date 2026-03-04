@@ -1,28 +1,30 @@
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
-
-
+import type { page } from "@/shared/types/sharedtypes";
+type Props = {
+  userProfile?: GraphUser_V1;
+  loading?: boolean;
+  photoUrl?: string | null;
+  setCurrentPage: (page: page) => void;
+};
 export default function Header({
   userProfile,
   loading,
   photoUrl,
-}: {
-  userProfile?: GraphUser_V1;
-  loading?: boolean;
-  photoUrl?: string | null;
-}) {
+  setCurrentPage,
+}: Props) {
   return (
     <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
       <h1 className="text-2xl font-semibold  w-100">Time Tracker</h1>
       <nav>
         <ul className="flex space-x-4 list-disk">
           <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-            <button>Главная</button>
+            <button onClick={() => setCurrentPage("main")}>Главная</button>
           </li>
           <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white ">
-            <button>Лог времени</button>
+            <button onClick={() => setCurrentPage("log")}>Лог времени</button>
           </li>
           <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-            <button>Отчёты</button>
+            <button onClick={() => setCurrentPage("report")}>Отчёты</button>
           </li>
         </ul>{" "}
       </nav>

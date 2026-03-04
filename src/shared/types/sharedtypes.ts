@@ -30,3 +30,5 @@ export type PopupData = {
   task: TasksRead;
   isWeekend:boolean;
 };
+
+export type page = "main" | "log"|"report" |"about";
