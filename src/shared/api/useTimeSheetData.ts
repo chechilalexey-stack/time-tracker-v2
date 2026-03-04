@@ -42,7 +42,7 @@ export default function useTimeSheetData({
     const oDataFilterProjects = `User/EMail eq '${userProfile?.mail}'`;
     const oDataFilterEntries = `Author/EMail eq '${userProfile?.mail}' and Date ge '${startDate}' and Date le '${endDate}'`;
 
-    console.log(oDataFilterEntries);
+    //console.log(oDataFilterEntries);
     if (!userProfile?.userPrincipalName) return;
     const fetchData = async () => {
       setLoading(true);
@@ -61,7 +61,7 @@ export default function useTimeSheetData({
           filter: oDataFilterEntries,
         });
         setTimeEntries(timeEntries.data);
-        console.log(timeEntries);
+        //console.log(timeEntries);
       } catch (error) {
         toast.error(
           "Не удалось загрузить данные. Пожалуйста, попробуйте позже.",
