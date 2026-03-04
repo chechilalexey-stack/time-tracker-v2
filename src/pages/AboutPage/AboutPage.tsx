@@ -8,14 +8,7 @@ export default function AboutPage() {
         🕒 Time Tracker App
       </h1>
 
-      {/* Секция скриншота */}
-      <div className="border rounded-lg overflow-hidden shadow-md">
-        <img
-          src="/docs/screenshot.png"
-          alt="Time Tracker Screenshot"
-          className="w-full h-auto object-cover"
-        />
-      </div>
+    
 
       {/* Краткое описание */}
       <p className="text-gray-700 text-lg">
