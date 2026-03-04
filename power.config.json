@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "appId": "a6bc9631-50a7-4a22-81fd-53fb74f2151c",
+  "appDisplayName": "Time Tracker Ref",
+  "region": "prod",
+  "environmentId": "1a1b4058-a308-ed03-9ee5-848ef702125a",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:5174",
+  "logoPath": "Default",
+  "connectionReferences": {
+    "4fa54fac-1b2f-4e4b-9551-ba695e256bb6": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+      "displayName": "Office 365 Users",
+      "dataSources": [
+        "office365users"
+      ],
+      "dataSets": {}
+    },
+    "8d1b101d-170e-49b1-83f1-0a508c955edb": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "displayName": "SharePoint",
+      "dataSources": [
+        "projects_code",
+        "tasks",
+        "timeentries",
+        "projects_assignment"
+      ],
+      "dataSets": {
+        "https://awarappdemo.sharepoint.com/sites/TimeSheetCodeApp/": {
+          "dataSources": {
+            "projects_code": {
+              "tableName": "Projects_code"
+            },
+            "tasks": {
+              "tableName": "Tasks"
+            },
+            "timeentries": {
+              "tableName": "TimeEntries"
+            },
+            "projects_assignment": {
+              "tableName": "projects_assignment"
+            }
+          }
+        }
+      }
+    }
+  },
+  "databaseReferences": {}
+}
