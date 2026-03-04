@@ -64,60 +64,61 @@
 ---
 
 ## 📂 Структура проекта
+Project/
 ├─ public/
-│ └─ site-icon-TS.svg
+│  └─ site-icon-TS.svg
 ├─ src/
-│ ├─ assets/
-│ │ └─ react.svg
-│ ├─ constants/
-│ │ └─ table.ts
-│ ├─ generated/
-│ │ ├─ models/
-│ │ │ ├─ CommonModels.ts
-│ │ │ ├─ Office365UsersModel.ts
-│ │ │ ├─ Projects_assignmentModel.ts
-│ │ │ ├─ Projects_codeModel.ts
-│ │ │ ├─ TasksModel.ts
-│ │ │ └─ TimeEntriesModel.ts
-│ │ └─ services/
-│ │ ├─ Office365UsersService.ts
-│ │ ├─ Projects_assignmentService.ts
-│ │ ├─ Projects_codeService.ts
-│ │ ├─ TasksService.ts
-│ │ └─ TimeEntriesService.ts
-│ ├─ pages/
-│ │ └─ TimeSheetPage/
-│ │ └─ TimeSheetPage.tsx
-│ ├─ shared/
-│ │ ├─ api/
-│ │ │ ├─ useGetTimeEnries.ts
-│ │ │ ├─ useSaveData.ts
-│ │ │ ├─ useTimeSheetData.ts
-│ │ │ ├─ useTimeSheetDataBackUp.ts
-│ │ │ └─ useUser.ts
-│ │ ├─ hooks/
-│ │ │ └─ useTimeEntries.ts
-│ │ ├─ sceletonLoading/
-│ │ │ └─ LoaderTable.tsx
-│ │ ├─ types/
-│ │ │ └─ sharedtypes.ts
-│ │ └─ utils/
-│ │ ├─ calculateCoordinates.ts
-│ │ └─ GetDate.ts
-│ └─ widgets/
-│ ├─ Footer/
-│ │ └─ Footer.tsx
-│ ├─ Header/
-│ │ └─ Header.tsx
-│ └─ TimeSheetTable/
-│ ├─ TimeSheetRowTask.tsx
-│ ├─ TimeSheetTable.tsx
-│ ├─ timsSheetRowProject.tsx
-│ └─ components/
-│ ├─ AddTimeEntryPopup.tsx
-│ ├─ HoverCellPopup.tsx
-│ ├─ HoverGuidlines.tsx
-│ └─ MonthYearSwitch.tsx
+│  ├─ assets/
+│  │  └─ react.svg
+│  ├─ constants/
+│  │  └─ table.ts
+│  ├─ generated/
+│  │  ├─ models/
+│  │  │  ├─ CommonModels.ts
+│  │  │  ├─ Office365UsersModel.ts
+│  │  │  ├─ Projects_assignmentModel.ts
+│  │  │  ├─ Projects_codeModel.ts
+│  │  │  ├─ TasksModel.ts
+│  │  │  └─ TimeEntriesModel.ts
+│  │  └─ services/
+│  │     ├─ Office365UsersService.ts
+│  │     ├─ Projects_assignmentService.ts
+│  │     ├─ Projects_codeService.ts
+│  │     ├─ TasksService.ts
+│  │     └─ TimeEntriesService.ts
+│  ├─ pages/
+│  │  └─ TimeSheetPage/
+│  │     └─ TimeSheetPage.tsx
+│  ├─ shared/
+│  │  ├─ api/
+│  │  │  ├─ useGetTimeEnries.ts
+│  │  │  ├─ useSaveData.ts
+│  │  │  ├─ useTimeSheetData.ts
+│  │  │  ├─ useTimeSheetDataBackUp.ts
+│  │  │  └─ useUser.ts
+│  │  ├─ hooks/
+│  │  │  └─ useTimeEntries.ts
+│  │  ├─ sceletonLoading/
+│  │  │  └─ LoaderTable.tsx
+│  │  ├─ types/
+│  │  │  └─ sharedtypes.ts
+│  │  └─ utils/
+│  │     ├─ calculateCoordinates.ts
+│  │     └─ GetDate.ts
+│  └─ widgets/
+│     ├─ Footer/
+│     │  └─ Footer.tsx
+│     ├─ Header/
+│     │  └─ Header.tsx
+│     └─ TimeSheetTable/
+│        ├─ TimeSheetRowTask.tsx
+│        ├─ TimeSheetTable.tsx
+│        ├─ timsSheetRowProject.tsx
+│        └─ components/
+│           ├─ AddTimeEntryPopup.tsx
+│           ├─ HoverCellPopup.tsx
+│           ├─ HoverGuidlines.tsx
+│           └─ MonthYearSwitch.tsx
 ├─ App.tsx
 ├─ main.tsx
 ├─ index.css
