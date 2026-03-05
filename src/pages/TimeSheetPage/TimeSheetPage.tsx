@@ -66,7 +66,6 @@ export default function TimeSheetPage({ userProfile, formattedDate }: Props) {
           </p>
         </div>
       )}
-   
     </div>
   );
 }

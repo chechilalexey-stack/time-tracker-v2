@@ -27,8 +27,10 @@ export default function useTimeSheetData({
 
   const [assignedTasks, setAssignedTasks] = useState<TasksRead[]>([]);
   const [timeEntries, setTimeEntries] = useState<TimeEntriesRead[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const [loadingProjects, setLoadingProjects] = useState(true);
+  const [loadingTasks, setLoadingTasks] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const loading = loadingProjects || loadingTasks || loadingProfile;
   //console.log(userProfile?.mail==="achechil@AwaraPPDemo.onmicrosoft.com");
 
   //Загрузка проектов доступнах пользователю
@@ -43,10 +45,15 @@ export default function useTimeSheetData({
     const oDataFilterEntries = `Author/EMail eq '${userProfile?.mail}' and Date ge '${startDate}' and Date le '${endDate}'`;
 
     //console.log(oDataFilterEntries);
-    if (!userProfile?.userPrincipalName) return;
+    if (!userProfile?.userPrincipalName) {
+      return;
+    } else {
+      setLoadingProfile(false);
+    }
+
     const fetchData = async () => {
-      setLoading(true);
       try {
+        setLoadingProjects(true);
         //Полчение назначенных проектов
         const assignedProjectsResponce =
           await Projects_assignmentService.getAll({
@@ -67,7 +74,7 @@ export default function useTimeSheetData({
           "Не удалось загрузить данные. Пожалуйста, попробуйте позже.",
         );
       } finally {
-        setLoading(false);
+        setLoadingProjects(false);
       }
     };
     fetchData();
@@ -75,8 +82,12 @@ export default function useTimeSheetData({
   //получение тасок по проектам
 
   useEffect(() => {
-    if (!assignedProjects.length) return;
+    if (!assignedProjects.length) {
+      return;
+    }
+
     const fetchTasks = async () => {
+      setLoadingTasks(true);
       try {
         const projectIds = assignedProjects
           .map((p) => p["Project#Id"])
@@ -93,6 +104,8 @@ export default function useTimeSheetData({
         toast.error(
           "Не удалось загрузить данные. Пожалуйста, попробуйте позже.",
         );
+      } finally {
+        setLoadingTasks(false);
       }
     };
     fetchTasks();

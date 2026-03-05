@@ -7,7 +7,7 @@ import useUser from "@/shared/api/useUser";
 import Footer from "@/widgets/Footer/Footer";
 import TimeSheetEntries from "@/pages/TimeSheetEntries/TimeSheetEntries";
 import AboutPage from "@/pages/AboutPage/AboutPage";
-import WelcomePage from "@/pages/WelcomePage/WelcomePage"
+import WelcomePage from "@/pages/WelcomePage/WelcomePage";
 export default function App() {
   const { userProfile, loading, photo } = useUser();
   const today = new Date();
@@ -24,7 +24,7 @@ export default function App() {
   const renderPage = () => {
     switch (currentPage) {
       case "main":
-        return <WelcomePage/>;
+        return <WelcomePage />;
       case "log":
         return (
           <TimeSheetPage
@@ -33,10 +33,10 @@ export default function App() {
           />
         );
       case "report":
-        return <TimeSheetEntries />;
+        return <TimeSheetEntries userProfile={userProfile} />;
       case "about":
         return <AboutPage />;
-      
+
       default:
         return null;
     }

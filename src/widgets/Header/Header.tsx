@@ -15,16 +15,26 @@ export default function Header({
   return (
     <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
       <h1 className="text-2xl font-semibold  w-100">Time Tracker</h1>
+
       <nav>
         <ul className="flex space-x-4 list-disk">
-          <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-            <button onClick={() => setCurrentPage("main")}>Главная</button>
+          <li
+            onClick={() => setCurrentPage("main")}
+            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+          >
+            <button>Главная</button>
           </li>
-          <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white ">
-            <button onClick={() => setCurrentPage("log")}>Лог времени</button>
+          <li
+            onClick={() => setCurrentPage("log")}
+            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white "
+          >
+            <button>Лог времени</button>
           </li>
-          <li className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-            <button onClick={() => setCurrentPage("report")}>Отчёты</button>
+          <li
+            onClick={() => setCurrentPage("report")}
+            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+          >
+            <button>Отчёты</button>
           </li>
         </ul>{" "}
       </nav>
