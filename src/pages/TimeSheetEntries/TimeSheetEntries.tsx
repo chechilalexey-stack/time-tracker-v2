@@ -36,7 +36,19 @@ export default function TimeSheetEntries({ userProfile }: Props) {
         </div>
         <div className="p-4 space-y-3">
           {loading ? (
-            <LoaderTasks rows={3}/>
+            <LoaderTasks rows={3} />
+          ) : timeEntries.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
+              <div className="text-4xl">🤷‍♂️</div>
+
+              <p className="text-gray-600 text-lg font-medium">
+                Нет введённых данных
+              </p>
+
+              <p className="text-gray-500 text-sm">
+                За выбранный период записи времени отсутствуют
+              </p>
+            </div>
           ) : (
             timeEntries.map((entry) => (
               <div
