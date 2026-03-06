@@ -13,7 +13,7 @@ export default function Header({
   setCurrentPage,
 }: Props) {
   return (
-    <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
+    <header className="sticky  top-0 w-full z-30 bg-gray-800 text-white p-4 flex items-center justify-between">
       <h1 className="text-2xl font-semibold  w-100">Time Tracker</h1>
 
       <nav>

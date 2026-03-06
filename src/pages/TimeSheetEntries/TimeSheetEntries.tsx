@@ -22,7 +22,7 @@ export default function TimeSheetEntries({ userProfile }: Props) {
 
   return (
     <>
-      <div className="p-4 bg-white rounded shadow w-full">
+      <div className="p-4 bg-white rounded shadow w-full ">
         <div className=" flex justify-between pl-4 pr-4 ">
           <h2 className="text-2xl font-bold w-126">Введенные данные</h2>
           <MonthYearSwitch
@@ -33,7 +33,7 @@ export default function TimeSheetEntries({ userProfile }: Props) {
           />
           <div className="w-126"></div>
         </div>
-        <div className="p-4 space-y-3">
+        <div className="p-4 space-y-3 overflow-auto max-h-[550px]">
           {loading ? (
             <LoaderTasks rows={3} />
           ) : projects.length === 0 ? (

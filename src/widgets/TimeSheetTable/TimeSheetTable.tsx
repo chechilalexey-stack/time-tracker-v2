@@ -35,8 +35,9 @@ export default function TimeSheetTable({
   initialTimeEntries,
   formattedDate,
 }: Props) {
-  const [timeEntries, setTimeEntries] = useState<TimeEntry[]>(initialTimeEntries);
-//setTimeEntries(initialTimeEntries);
+  const [timeEntries, setTimeEntries] =
+    useState<TimeEntry[]>(initialTimeEntries);
+  //setTimeEntries(initialTimeEntries);
   const daysInMonth = getDaysInMonthWithWeekdays(currentYear, currentMonth);
 
   const [popup, setPopup] = useState<PopupData | null>(null);
@@ -215,7 +216,7 @@ export default function TimeSheetTable({
                       ${hoursInDay >= 8 ? " text-emerald-300 " : day.date < formattedDate && hoursInDay < 8 && !day.isWeekend ? " text-red-300" : ""}
                      `}
                   >
-                    {hoursInDay}
+                    {hoursInDay } 
                   </td>
                 );
               })}

@@ -106,6 +106,7 @@ export default function useTimeSheetData({
 
     //console.log(oDataFilterEntries);
     if (!userProfile?.userPrincipalName) {
+      setLoadingProfile(false);
       return;
     } else {
       setLoadingProfile(false);
