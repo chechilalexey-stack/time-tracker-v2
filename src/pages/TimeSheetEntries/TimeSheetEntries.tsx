@@ -15,10 +15,9 @@ export default function TimeSheetEntries({ userProfile }: Props) {
   );
   if (!userProfile?.mail) return;
   const {
-    /*projects, tasks,*/ loading,
-    // assignedTasks,
-    //assignedProjects,
-    timeEntries,
+    loading,
+
+    projects,
   } = useTimeSheetData({ userProfile, currentMonth, currentYear });
 
   return (
@@ -37,7 +36,7 @@ export default function TimeSheetEntries({ userProfile }: Props) {
         <div className="p-4 space-y-3">
           {loading ? (
             <LoaderTasks rows={3} />
-          ) : timeEntries.length === 0 ? (
+          ) : projects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
               <div className="text-4xl">🤷‍♂️</div>
 
@@ -50,26 +49,29 @@ export default function TimeSheetEntries({ userProfile }: Props) {
               </p>
             </div>
           ) : (
-            timeEntries.map((entry) => (
-              <div
-                key={entry.ID}
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md hover:border-gray-300 transition"
-              >
-                <div className="flex flex-col">
-                  <span className="font-medium text-gray-800">
-                    {entry.Title}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    ID: {entry.TaskID}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    Дата: {entry.Date}
-                  </span>
-                </div>
+            projects
+              .flatMap((projects) => projects.tasks)
+              .flatMap((task) => task.timeEntries)
+              .map((entry) => (
+                <div
+                  key={entry.id}
+                  className="flex items-center justify-between p-3 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md hover:border-gray-300 transition"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-800">
+                      {entry.taskId}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      ID: {entry.taskId}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      Дата: {entry.projectId}
+                    </span>
+                  </div>
 
-                <div className="text-sm text-gray-400">#{entry.ID}</div>
-              </div>
-            ))
+                  <div className="text-sm text-gray-400">#{entry.id}</div>
+                </div>
+              ))
           )}
         </div>
       </div>

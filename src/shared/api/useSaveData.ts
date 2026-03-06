@@ -1,13 +1,14 @@
 import { TimeEntriesService } from "@/generated/services/TimeEntriesService";
 import type { PopupData } from "@/shared/types/sharedtypes";
 import { toast } from "react-toastify";
-import type { TimeEntriesRead } from "@/generated/models/TimeEntriesModel";
+import type { TimeEntry } from "@/shared/types/sharedtypes";
+
 export default function useSaveData() {
   const save = async (
     hours: number | "",
     comment: string,
     popup: PopupData | null,
-  ): Promise<TimeEntriesRead | null> => {
+  ): Promise<TimeEntry | null> => {
     if (!popup) return null;
 
     try {
@@ -18,7 +19,7 @@ export default function useSaveData() {
           Comment: comment,
           Date: popup.day,
           TaskID: popup.taskId,
-          projectId: popup.task["ProjectName#Id"],
+          projectId: popup.task.projectId,
         }),
         {
           pending: "Сохранение...",
@@ -26,8 +27,22 @@ export default function useSaveData() {
           error: "Ошибка сохранения",
         },
       );
+         const raw = newEntry.data;
 
-      return newEntry.data;
+      if (!raw) return null;
+
+      // ✅ Маппим API объект в UI тип TimeEntry
+      const mapped: TimeEntry = {
+        id: raw.ID ?? 0, // или raw.Id если приходит так
+        projectId: raw.projectId ?? raw.projectId ?? 0,
+        taskId: raw.TaskID ?? 0,
+        date: raw.Date ?? "",
+        hours: raw.Hours ?? 0,
+      };
+
+      return mapped;
+      
+
     } catch {
       toast.error("Что-то пошло не так.");
       return null;

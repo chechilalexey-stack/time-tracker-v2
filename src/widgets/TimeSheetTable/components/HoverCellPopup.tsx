@@ -1,7 +1,7 @@
-import type { TasksRead } from "@/generated/models/TasksModel";
-import type { days } from "@/shared/types/sharedtypes";
+//import type { TasksRead } from "@/generated/models/TasksModel";
+import type { days,Task } from "@/shared/types/sharedtypes";
 type Props = {
-  task: TasksRead;
+  task: Task;
   hoverPos: {
     x: number;
     y: number;
@@ -28,10 +28,10 @@ export default function HoverCellPopup({ task, hoverPos }: Props) {
       }
       {
         <p className="m-0 text-xs font-bold text-gray-800">
-          {task.ProjectName?.Value}
+          {task.projectTitle}
         </p>
       }
-      {<p className="m-0 text-xs font-semibold text-gray-800">{task.Title}</p>}
+      {<p className="m-0 text-xs font-semibold text-gray-800">{task.title}</p>}
     </div>
   );
 }

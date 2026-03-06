@@ -1,21 +1,24 @@
-import type { Projects_assignmentRead } from "@/generated/models/Projects_assignmentModel";
-import type { TasksRead } from "@/generated/models/TasksModel";
 import TimeSheetRowProject from "@/widgets/TimeSheetTable/timsSheetRowProject";
 import getDaysInMonthWithWeekdays from "@/shared/utils/GetDate";
-import type { days } from "@/shared/types/sharedtypes";
+import type {
+  days,
+  Project,
+  Task,
+  TimeEntry,
+} from "@/shared/types/sharedtypes";
 import { useRef, useState, useMemo } from "react";
 import AddTimeEntryPopup from "@/widgets/TimeSheetTable/components/AddTimeEntryPopup";
-import type { TimeEntriesRead } from "@/generated/models/TimeEntriesModel";
 import type { PopupData } from "@/shared/types/sharedtypes";
 import saveTimeEntry from "@/shared/api/useSaveData";
 import HoverCellPopup from "@/widgets/TimeSheetTable/components/HoverCellPopup";
 import HoverGuidlines from "@/widgets/TimeSheetTable/components/HoverGuidlines";
 type Props = {
-  projects: Projects_assignmentRead[];
-  tasks: TasksRead[];
+  projects: Project[];
+
   currentMonth: number;
   currentYear: number;
-  initialTimeEntries: TimeEntriesRead[];
+
+  initialTimeEntries: TimeEntry[];
   formattedDate: string;
 };
 type Coordinates = {
@@ -26,26 +29,18 @@ type Coordinates = {
 };
 export default function TimeSheetTable({
   projects,
-  tasks,
+
   currentMonth,
   currentYear,
   initialTimeEntries,
   formattedDate,
 }: Props) {
-  const [timeEntries, setTimeEntries] = useState<TimeEntriesRead[]>(
-    initialTimeEntries || [],
-  );
+  const [timeEntries, setTimeEntries] = useState<TimeEntry[]>(initialTimeEntries);
+//setTimeEntries(initialTimeEntries);
   const daysInMonth = getDaysInMonthWithWeekdays(currentYear, currentMonth);
-  // const start = new Date(currentYear, currentMonth, 1).getTime();
-  //const end = new Date(formattedDate).getTime();
+
   const [popup, setPopup] = useState<PopupData | null>(null);
   const tableRef = useRef<HTMLTableElement>(null);
-  const groupedData = projects.map((project) => ({
-    ...project,
-    tasks: tasks.filter(
-      (task) => task["ProjectName#Id"] === project["Project#Id"],
-    ),
-  }));
 
   const handleHoursChange = (
     x: number,
@@ -53,7 +48,7 @@ export default function TimeSheetTable({
     taskId: number,
     day: string,
     weekday: string,
-    task: TasksRead,
+    task: Task,
     isWeekend: boolean,
   ) => {
     if (!tableRef.current) return;
@@ -75,7 +70,7 @@ export default function TimeSheetTable({
 
   const [hoverPos, setHoverPos] = useState<Coordinates | null>(null);
   const [hoveredDay, setHoveredDay] = useState<{
-    task: TasksRead;
+    task: Task;
     day: days[number];
   } | null>(null);
 
@@ -105,11 +100,11 @@ export default function TimeSheetTable({
     const map: Record<string, number> = {};
 
     for (const entry of timeEntries) {
-      const date = entry.Date;
+      const date = entry.date;
       if (!date) continue;
 
       if (!map[date]) map[date] = 0;
-      map[date] += entry.Hours || 0;
+      map[date] += entry.hours || 0;
     }
 
     return map;
@@ -187,11 +182,11 @@ export default function TimeSheetTable({
             <tr className="h-1  bg-transparent border-0"></tr>
           </thead>
 
-          {groupedData.map((project) => (
+          {projects.map((project) => (
             <TimeSheetRowProject
-              key={project.ID}
+              key={project.id}
               project={project}
-              tasks={project.tasks}
+              //tasks={project.tasks}
               days={daysInMonth}
               timeEntries={timeEntries}
               handleHoursChange={handleHoursChange}
@@ -199,7 +194,6 @@ export default function TimeSheetTable({
             />
           ))}
           <tfoot>
-            {" "}
             <tr className="sticky left-0 bottom-0 bg-gray-500 text-white border p-2 text-left border-slate-800">
               <td
                 className="border-r  p-1 pb-2 text-center font-bold border-slate-800 "
@@ -208,7 +202,7 @@ export default function TimeSheetTable({
                 Итого часов в день
               </td>
               {daysInMonth.map((day) => {
-                 const hoursInDay = hoursByDate[day.date] || 0;
+                const hoursInDay = hoursByDate[day.date] || 0;
                 /*const hoursInDay = timeEntries
                   .filter((e) => e.Date === day.date)
                   .reduce((acc, entry) => acc + (entry.Hours || 0), 0);*/
@@ -218,7 +212,7 @@ export default function TimeSheetTable({
                     className={`border-r h-8 text-center font-semibold border-slate-800 
                       ${day.date === formattedDate ? " border-b-5 border-b-zinc-300  pb-0 " : "pb-1  "}
                       ${day.isWeekend ? "bg-gray-700" : ""} 
-                      ${hoursInDay >= 8 ? " text-emerald-300 " : day.date < formattedDate && hoursInDay<8 &&!day.isWeekend? " text-red-300":"" }
+                      ${hoursInDay >= 8 ? " text-emerald-300 " : day.date < formattedDate && hoursInDay < 8 && !day.isWeekend ? " text-red-300" : ""}
                      `}
                   >
                     {hoursInDay}
@@ -234,7 +228,7 @@ export default function TimeSheetTable({
                     return time >= start && time <= end;
                    
                   })*/
-                  .reduce((acc, entry) => acc + (entry.Hours || 0), 0)}
+                  .reduce((acc, entry) => acc + (entry.hours || 0), 0)}
               </td>
             </tr>
           </tfoot>

@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import type { TasksRead } from "@/generated/models/TasksModel";
-
-type Props = {
+//import type { TasksRead } from "@/generated/models/TasksModel";
+import type {Task} from "@/shared/types/sharedtypes"
+ type Props = {
   hours: number | "";
   comment: string;
-  task: TasksRead;
+  task: Task;
   date: string;
   weekday: string;
   onClose: () => void;
@@ -86,11 +86,11 @@ export default function AddTimeEntryPopup({
           </p>
 
           <h2 className="font-bold text-lg text-gray-800">
-            {task.ProjectName?.Value}
+            {task.projectTitle}
           </h2>
 
           <h3 className="text-md font-medium text-gray-700 mt-1">
-            {task.Title}
+            {task.title}
           </h3>
         </div>
 

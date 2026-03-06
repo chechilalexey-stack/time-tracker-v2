@@ -1,4 +1,4 @@
-import type { TasksRead } from "@/generated/models/TasksModel"; 
+
 export type days = {
   day: number;
   weekday: string;
@@ -7,10 +7,23 @@ export type days = {
 }[];
 
 export type TimeEntry = {
+  id: number;
   projectId: number;
   taskId: number;
   date: string;
   hours: number;
+};
+export type Task = {
+  id: number;
+  projectId: number;
+  projectTitle: string;
+  title: string;
+  timeEntries: TimeEntry[];
+};
+export type Project = {
+  id: number;
+  title: string;
+  tasks: Task[];
 };
 export type Comment = {
   projectId: number;
@@ -27,8 +40,8 @@ export type PopupData = {
   taskId: number;
   day: string;
   weekday: string;
-  task: TasksRead;
-  isWeekend:boolean;
+  task: Task;
+  isWeekend: boolean;
 };
 
-export type page = "main" | "log"|"report" |"about";
+export type page = "main" | "log" | "report" | "about";

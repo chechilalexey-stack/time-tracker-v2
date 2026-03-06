@@ -1,13 +1,9 @@
-import type { TasksRead } from "@/generated/models/TasksModel";
-import type { days } from "@/shared/types/sharedtypes";
-//import type { TimeEntry } from "@/shared/types/sharedtypes";
-import type { TimeEntriesRead } from "@/generated/models/TimeEntriesModel";
+import type { days, Task, TimeEntry } from "@/shared/types/sharedtypes";
 import { useMemo } from "react";
-//import type { Comment } from "@/shared/types/sharedtypes";
 type Props = {
-  task: TasksRead;
+  task: Task;
   days: days;
-  timeEntries: TimeEntriesRead[];
+  timeEntries: TimeEntry[];
 
   //comments: Comment[];
   handleHoursChange: (
@@ -16,10 +12,10 @@ type Props = {
     taskId: any,
     day: string,
     weekday: string,
-    task: TasksRead,
+    task: Task,
     isWeekend: boolean,
   ) => void;
-  setHoveredDay: (data: { task: TasksRead; day: days[number] } | null) => void;
+  setHoveredDay: (data: { task: Task; day: days[number] } | null) => void;
 };
 export default function TimeSheetRowTask({
   task,
@@ -29,38 +25,35 @@ export default function TimeSheetRowTask({
   setHoveredDay,
 }: Props) {
   //const [hover, setHover] = useState(false);
-
-  const entriesMap = useMemo(() => {
-    const map = new Map<string, number>();
-
-    timeEntries.forEach((e) => {
-      map.set(`${e.TaskID}-${e.Date}`, e.Hours || 0);
-    });
-
+  const entriesByTaskDay = useMemo(() => {
+    const map = new Map<string, TimeEntry>();
+    for (const e of timeEntries) {
+      map.set(`${e.taskId}-${e.date}`, e);
+    }
     return map;
   }, [timeEntries]);
-
   return (
     <>
       <tr className="bg-white ">
         <td className="border-b border-r border-slate-300 sticky left-0 bg-white p-2 pl-8  border-l border-slate-300">
           <div className="flex justify-between gap-1 items-center">
-            {task.Title}{" "}
+            {task.title}{" "}
             <button
               title=""
               className="px-1 py-1  rounded-md bg-white hover:bg-gray-100"
             >
               {"\u22EE"}
             </button>
-
-
-        
           </div>
         </td>
 
         {days.map((day) => {
-          const hours = entriesMap.get(`${task.ID}-${day.date}`) || 0;
+          // const hours = task.timeEntries. || 0;
 
+          /*const entryForDay = task.timeEntries.find((e) => e.date === day.date);
+          const hours = entryForDay?.hours ?? 0;*/
+          const key = `${task.id}-${day.date}`;
+          const hours = entriesByTaskDay.get(key)?.hours ?? 0;
           const additionalClass =
             hours === 0 ? " text-gray-300" : " text-gray-800";
           return (
@@ -71,7 +64,7 @@ export default function TimeSheetRowTask({
                 handleHoursChange(
                   e.clientX,
                   e.clientY,
-                  task.ID,
+                  task.id,
                   day.date,
                   day.weekday,
                   task,
@@ -93,9 +86,9 @@ export default function TimeSheetRowTask({
           );
         })}
         <td className="border-b border-r p-2 text-center bg-gray-600 font-bold sticky right-0  text-white border-slate-800">
-          {timeEntries
-            .filter((e) => e.TaskID === task.ID)
-            .reduce((acc, entry) => acc + (entry.Hours || 0), 0)}
+          {task.timeEntries
+            .filter((e) => e.taskId === task.id)
+            .reduce((acc, entry) => acc + (entry.hours || 0), 0)}
         </td>
       </tr>
     </>

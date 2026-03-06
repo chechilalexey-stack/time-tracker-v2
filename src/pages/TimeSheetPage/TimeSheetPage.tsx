@@ -19,12 +19,15 @@ export default function TimeSheetPage({ userProfile, formattedDate }: Props) {
   );
 
   const {
-    /*projects, tasks,*/ loading,
-    assignedTasks,
-    assignedProjects,
-    timeEntries,
-  } = useTimeSheetData({ userProfile, currentMonth, currentYear });
+    loading,
 
+    projects,
+  } = useTimeSheetData({ userProfile, currentMonth, currentYear });
+ const initialTimeEnries =
+    projects
+      .flatMap((project) => project.tasks)
+      .flatMap((task) => task.timeEntries)
+  ;
   return (
     <div className="p-4 bg-white rounded shadow w-full">
       <div className=" flex justify-between pl-4 pr-4 ">
@@ -39,14 +42,13 @@ export default function TimeSheetPage({ userProfile, formattedDate }: Props) {
       </div>
       {loading ? (
         <LoaderTable />
-      ) : assignedProjects.length > 0 ? (
+      ) : projects.length > 0 ? (
         <TimeSheetTable
-          projects={assignedProjects}
-          tasks={assignedTasks}
+          projects={projects}
           currentMonth={currentMonth + 1}
           currentYear={currentYear}
-          initialTimeEntries={timeEntries}
           formattedDate={formattedDate}
+          initialTimeEntries = {initialTimeEnries}
         />
       ) : (
         <div className="flex flex-col items-center justify-center py-10 text-center gap-2">

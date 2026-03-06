@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo } from "react";
+/*import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+//import { Projects_codeService } from "@/generated";
 import { TasksService } from "@/generated";
-
+//import type { Projects_codeRead } from "@/generated/models/Projects_codeModel";
 import type { TasksRead } from "@/generated/models/TasksModel";
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import { Projects_assignmentService } from "@/generated";
@@ -15,64 +15,6 @@ type Props = {
   currentYear: number;
   currentMonth: number;
 };
-function buildProjects(
-  assignedProjects: Projects_assignmentRead[],
-  assignedTasks: TasksRead[],
-  timeEntries: TimeEntriesRead[],
-) {
-  const entriesByTask = new Map<number, TimeEntry[]>();
-
-  timeEntries.forEach((entry) => {
-    const taskId = entry.TaskID ?? 0;
-
-    const mappedEntry: TimeEntry = {
-      id: entry.ID ?? 0,
-      projectId: entry.projectId ?? 0,
-      taskId,
-      date: entry.Date ?? "",
-      hours: entry.Hours ?? 0,
-    };
-
-    if (!entriesByTask.has(taskId)) {
-      entriesByTask.set(taskId, []);
-    }
-
-    entriesByTask.get(taskId)!.push(mappedEntry);
-  });
-
-  const tasksByProject = new Map<number, Task[]>();
-
-  assignedTasks.forEach((task) => {
-    const projectId = task["Project_x0020_Name_x003a__x0020_#Id"] ?? 0;
-    const projectTitle = task.ProjectName?.Value ?? "";
-    const taskId = task.ID ?? 0;
-
-    const mappedTask: Task = {
-      id: taskId,
-      projectId: projectId,
-      projectTitle: projectTitle,
-      title: task.Title ?? "",
-      timeEntries: entriesByTask.get(taskId) ?? [],
-    };
-
-    if (!tasksByProject.has(projectId)) {
-      tasksByProject.set(projectId, []);
-    }
-
-    tasksByProject.get(projectId)!.push(mappedTask);
-  });
-  const mappedProjects: Project[] = assignedProjects.map((p) => {
-    const projectId = p["Project#Id"] ?? 0;
-
-    return {
-      id: projectId,
-      title: p.Project?.Value ?? "",
-      tasks: tasksByProject.get(projectId) ?? [],
-    };
-  });
-  return mappedProjects;
-}
-
 export default function useTimeSheetData({
   userProfile,
   currentMonth,
@@ -89,7 +31,7 @@ export default function useTimeSheetData({
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(true);
-
+  const [projects, setProjects] = useState<Project[]>([]);
   const loading = loadingProjects || loadingTasks || loadingProfile;
   //console.log(userProfile?.mail==="achechil@AwaraPPDemo.onmicrosoft.com");
 
@@ -170,17 +112,53 @@ export default function useTimeSheetData({
     };
     fetchTasks();
   }, [assignedProjects]);
-  const projects = useMemo(
-    () => buildProjects(assignedProjects, assignedTasks, timeEntries),
-    [assignedProjects, assignedTasks, timeEntries],
-  );
-  console.log(projects);
+
+  useEffect(() => {
+    if (!assignedProjects.length||!assignedTasks.length) return;
+
+    const mappedProjects: Project[] = assignedProjects.map((p) => {
+      const projectId = p["Project#Id"] ?? 0;
+      const projectTitle = p.Project?.Value ?? "";
+
+      const tasksForProject = assignedTasks
+        .filter((t) => t["Project_x0020_Name_x003a__x0020_#Id"] === projectId)
+        .map((task): Task => {
+          const taskId = task.ID ?? 0;
+
+          const entriesForTask = timeEntries
+            .filter((e) => e.TaskID === taskId)
+            .map(
+              (entry): TimeEntry => ({
+                id: entry.ID ?? 0,
+                projectId: projectId,
+                taskId: taskId,
+                date: entry.Date ?? "",
+                hours: entry.Hours ?? 0,
+              }),
+            );
+
+          return {
+            id: taskId,
+            title: task.Title ?? "",
+            timeEntries: entriesForTask,
+          };
+        });
+
+      return {
+        id: projectId,
+        title: projectTitle,
+        tasks: tasksForProject,
+      };
+    });
+    console.log(mappedProjects);
+    setProjects(mappedProjects);
+  }, [assignedProjects, assignedTasks, timeEntries]);
+
   return {
     loading,
-    // assignedProjects,
-    // assignedTasks,
-    // timeEntries,
-    projects,
+    assignedProjects,
+    assignedTasks,
+    timeEntries,
   };
 }
 
