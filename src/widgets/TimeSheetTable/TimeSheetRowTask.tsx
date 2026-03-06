@@ -86,7 +86,7 @@ export default function TimeSheetRowTask({
           );
         })}
         <td className="border-b border-r p-2 text-center bg-gray-600 font-bold sticky right-0  text-white border-slate-800">
-          {task.timeEntries
+          {timeEntries
             .filter((e) => e.taskId === task.id)
             .reduce((acc, entry) => acc + (entry.hours || 0), 0)}
         </td>
@@ -94,42 +94,3 @@ export default function TimeSheetRowTask({
     </>
   );
 }
-/*<input
-                className={
-                  "w-full h-full text-center outline-none" + additionalClass
-                }
-                id={`input-${task["ProjectName#Id"]}-${task.ID}-${day.weekday}-${day.day}`}
-                value={hours}
-                onChange={(e) =>
-                  handleHoursChange(task.ID!, day.date, e.target.value)
-                }
-              />*/
-
-/*{hoverPos && (
-        <div
-          className="absolute px-2 py-2 text-xs bg-white text-black border border-gray-200 rounded shadow-sm pointer-events-none z-50 flex flex-col gap-1"
-          style={{
-            top: hoverPos.y + 10, // немного ниже курсора
-            left: hoverPos.x + 10, // немного правее курсора
-            position: "fixed", // фиксируем относительно окна
-          }}
-        >
-          {
-            <p
-              className={`m-0 text-xs leading-tight ${hoverPos.day.isWeekend ? "text-red-600" : "text-gray-700"}`}
-            >
-              {hoverPos.day.weekday} {hoverPos.day.date}
-            </p>
-          }
-          {
-            <p className="m-0 text-xs font-bold text-gray-800">
-              {task.ProjectName?.Value}
-            </p>
-          }
-          {
-            <p className="m-0 text-xs font-semibold text-gray-800">
-              {task.Title}
-            </p>
-          }
-        </div>
-      )}*/

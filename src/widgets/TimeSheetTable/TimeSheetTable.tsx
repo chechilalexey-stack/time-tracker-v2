@@ -112,7 +112,7 @@ export default function TimeSheetTable({
 
   return (
     <div className="m-4 relative animate-fadeIn">
-      <div className="overflow-auto max-h-[600px]" ref={tableRef}>
+      <div className="overflow-auto max-h-[500px]" ref={tableRef}>
         <table
           className="min-w-full border-separate  text-xs  border-spacing-0 "
           onMouseMove={handleMouseMove}

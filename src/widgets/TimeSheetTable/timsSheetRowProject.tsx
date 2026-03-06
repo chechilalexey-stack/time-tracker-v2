@@ -1,13 +1,19 @@
 import TimeSheetRowTask from "@/widgets/TimeSheetTable/TimeSheetRowTask";
 
-import type { days, Project, Task ,TimeEntry} from "@/shared/types/sharedtypes";
+import type {
+  days,
+  Project,
+  Task,
+  TimeEntry,
+} from "@/shared/types/sharedtypes";
 
 import { useState } from "react";
+//import { time } from "node:console";
 
 type Props = {
   project: Project;
   days: days;
-  timeEntries:TimeEntry[];
+  timeEntries: TimeEntry[];
   handleHoursChange: (
     x: number,
     y: number,
@@ -58,9 +64,8 @@ export default function TimeSheetRowProject({
               className="w-full h-full text-center cursor-pointer outline-none font-semibold cursor-default transparent text-zinc-600"
               id={`project-${project.id}-${day.weekday}-${day.day + 1}`}
               value={
-                project.tasks
-                  .flatMap((task) => task.timeEntries)
-                  .filter((entry) => entry.date === day.date)
+                timeEntries
+                  .filter((entry) => entry.date === day.date&&entry.projectId === project.id)
                   .reduce((acc, entry) => acc + (entry.hours || 0), 0) || ""
               }
               readOnly
@@ -68,10 +73,8 @@ export default function TimeSheetRowProject({
           </td>
         ))}
         <td className="border-b border-r border-t text-white border-slate-800 p-2 text-center bg-gray-700 sticky right-0 font-semibold">
-          {project.tasks
-            .flatMap((task) => task.timeEntries)
-
-            .reduce((acc, entry) => acc + (entry.hours || 0), 0)}
+          {timeEntries.filter((entry) => entry.projectId === project.id).
+          reduce((acc, entry) => acc + (entry.hours || 0), 0)}
         </td>
       </tr>
 
