@@ -19,7 +19,9 @@ export default function TimeSheetEntries({ userProfile }: Props) {
 
     projects,
   } = useTimeSheetData({ userProfile, currentMonth, currentYear });
-
+  const tasks = projects.flatMap((projects) => projects.tasks)
+              .flatMap((task) => task.timeEntries);
+           
   return (
     <>
       <div className="p-4 bg-white rounded shadow w-full ">
@@ -36,7 +38,7 @@ export default function TimeSheetEntries({ userProfile }: Props) {
         <div className="p-4 space-y-3 overflow-auto max-h-[550px]">
           {loading ? (
             <LoaderTasks rows={3} />
-          ) : projects.length === 0 ? (
+          ) : tasks.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
               <div className="text-4xl">🤷‍♂️</div>
 
@@ -49,10 +51,7 @@ export default function TimeSheetEntries({ userProfile }: Props) {
               </p>
             </div>
           ) : (
-            projects
-              .flatMap((projects) => projects.tasks)
-              .flatMap((task) => task.timeEntries)
-              .map((entry) => (
+            tasks.map((entry) => (
                 <div
                   key={entry.id}
                   className="flex items-center justify-between p-3 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md hover:border-gray-300 transition"
