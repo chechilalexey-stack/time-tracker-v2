@@ -1,5 +1,6 @@
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import type { page } from "@/shared/types/sharedtypes";
+import getInitials from "@/shared/utils/getInitials";
 type Props = {
   userProfile?: GraphUser_V1;
   loading?: boolean;
@@ -55,10 +56,10 @@ export default function Header({
             <img
               src={photoUrl}
               alt="User Photo"
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-10 h-10 rounded-full object-cover "
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm font-medium"></div>
+            <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm font-medium">{userProfile?.displayName?getInitials(userProfile?.displayName):""}</div>
           )}
         </div>
       )}
