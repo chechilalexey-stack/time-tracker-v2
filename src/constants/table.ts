@@ -15,7 +15,7 @@ export const MONTHS_NAMES = [
   "Ноябрь",
   "Декабрь",
 ];
-
+export const TIME_OUT_GET_DATA = 5000;
 /*table {
     border-left: 1px solid  oklch(86.9% 0.022 252.894);
 }

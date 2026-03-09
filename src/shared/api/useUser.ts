@@ -2,49 +2,76 @@ import { useEffect, useState } from "react";
 import { Office365UsersService } from "@/generated/services/Office365UsersService";
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import { toast } from "react-toastify";
-
+import withTimeout from "@/shared/utils/loadingTimeOut";
+import {TIME_OUT_GET_DATA} from "@/constants/table";
 export default function useUser() {
   const [userProfile, setUserProfile] = useState<GraphUser_V1>();
-  const [loading, setLoading] = useState(true);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    let isMounted = true;
+
+    const fetchPhoto = async (id?: string, upn?: string) => {
+      if (!id && !upn) return null;
+
       try {
-        const user = await Office365UsersService.MyProfile_V2(
-          "id,displayName,jobTitle,userPrincipalName,mail,claims",
+        const res = await Office365UsersService.UserPhoto_V2(id || upn!);
+        return res.data;
+      } catch {
+        if (upn && id) {
+          const res = await Office365UsersService.UserPhoto_V2(upn);
+          return res.data;
+        }
+      }
+
+      return null;
+    };
+
+    const fetchUser = async () => {
+      try {
+        const user = await toast.promise(
+          withTimeout(
+            Office365UsersService.MyProfile_V2(
+              "id,displayName,jobTitle,userPrincipalName,mail,claims",
+            ),
+            TIME_OUT_GET_DATA,
+          ),
+          {
+            pending: "Загрузка профиля...",
+            success: {
+              render({ data }) {
+                return `Добро пожаловать, ${data.data.displayName}`;
+              },
+            },
+            error: "Не удалось загрузить профиль 👻",
+          },
         );
 
-        setUserProfile(user.data);
-        if (user.data?.id || user.data?.userPrincipalName) {
-          // Try both id and userPrincipalName for photo
-          let photoData = null;
-          try {
-            photoData = (
-              await Office365UsersService.UserPhoto_V2(
-                user.data.id! || user.data.userPrincipalName!,
-              )
-            ).data;
-          } catch {
-            // fallback to userPrincipalName if id fails
-            if (user.data.userPrincipalName) {
-              photoData = (
-                await Office365UsersService.UserPhoto_V2(
-                  user.data.userPrincipalName,
-                )
-              ).data;
-            }
-          }
-          if (photoData) setPhoto(`data:image/jpeg;base64,${photoData}`);
-        }
-      } catch (error) {
-        toast.error(
-          "Не удалось загрузить профиль пользователя. Пожалуйста, попробуйте позже.",
+        if (!isMounted) return;
+
+        const profile = user.data;
+        setUserProfile(profile);
+
+        const photoData = await fetchPhoto(
+          profile?.id,
+          profile?.userPrincipalName,
         );
+
+        if (photoData && isMounted) {
+          setPhoto(`data:image/jpeg;base64,${photoData}`);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
-    fetchUserProfile();
+
+    fetchUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
-  return { userProfile, loading, photo };
+
+  return { userProfile, photo, loading };
 }

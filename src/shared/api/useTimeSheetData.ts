@@ -175,7 +175,7 @@ export default function useTimeSheetData({
     () => buildProjects(assignedProjects, assignedTasks, timeEntries),
     [assignedProjects, assignedTasks, timeEntries],
   );
-  console.log(projects);
+  //console.log(projects);
   return {
     loading,
     // assignedProjects,

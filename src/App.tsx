@@ -13,32 +13,46 @@ export default function App() {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
   const [currentPage, setCurrentPage] = useState("log");
-  useEffect(() => {
-    if (userProfile) {
-      toast.success(`Добро пожаловать, ${userProfile.displayName}`, {
-        toastId: "welcome-toast",
-      });
-    }
-  }, [userProfile]);
 
   const renderPage = () => {
-    switch (currentPage) {
-      case "main":
-        return <WelcomePage />;
-      case "log":
-        return (
-          <TimeSheetPage
-            userProfile={userProfile}
-            formattedDate={formattedDate}
-          />
-        );
-      case "report":
-        return <TimeSheetEntries userProfile={userProfile} />;
-      case "about":
-        return <AboutPage />;
+    if (userProfile && !loading) {
+      switch (currentPage) {
+        case "main":
+          return <WelcomePage />;
+        case "log":
+          return (
+            <TimeSheetPage
+              userProfile={userProfile}
+              formattedDate={formattedDate}
+            />
+          );
+        case "report":
+          return <TimeSheetEntries userProfile={userProfile} />;
+        case "about":
+          return <AboutPage />;
 
-      default:
-        return null;
+        default:
+          return null;
+      }
+    } else if (!loading) {
+      return (
+        <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
+          <div className="text-4xl">👻</div>
+
+          <p className="text-gray-600 text-lg font-medium">
+            Не удалось загрузить профиль пользователя
+          </p>
+
+          <p className="text-gray-500 text-sm">
+            Пожалуйста запустите приложение в PowerApps
+          </p>
+          <code>
+            npm run dev <br />
+            npx power-apps run
+          </code>
+          <p>проверьте порт локальной сессии</p>
+        </div>
+      );
     }
   };
 
