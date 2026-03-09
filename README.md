@@ -2,69 +2,234 @@
 
 ![Time Tracker Screenshot](docs/screenshot.png)
 
-**Time Tracker** — веб-приложение для учета рабочего времени сотрудников с интерактивной таблицей проектов и задач.
+**Time Tracker** — веб-приложение для учета рабочего времени сотрудников с интерактивной таблицей проектов и задач. Приложение интегрируется с Microsoft Power Apps и SharePoint через OData API, предоставляя удобный интерфейс для заполнения таймшитов.
 
 ---
 
 ## 🚀 Основные возможности
 
-- ✅ Просмотр назначенных проектов и задач
-- ✅ Внесение часов и комментариев
-- ✅ Подсветка текущего дня и выходных
-- ✅ Sticky header таблицы при прокрутке
-- ✅ Hover подсказки и гайдлайны на ячейках
-- ✅ Автоматическое суммирование часов по дням и месяцу
-- ✅ Уведомления через Toast (`react-toastify`)
+- **Просмотр назначенных проектов и задач** – автоматическая загрузка проектов и задач, назначенных текущему пользователю.
+- **Внесение часов и комментариев** – клик по ячейке таблицы открывает попап для ввода отработанных часов и комментария.
+- **Подсветка текущего дня и выходных** – визуальное выделение сегодняшней даты и выходных дней (суббота, воскресенье).
+- **Sticky header таблицы при прокрутке** – заголовки таблицы и колонка «Проект / Задача» фиксируются при вертикальной и горизонтальной прокрутке.
+- **Hover подсказки и гайдлайны** – при наведении на ячейку появляются всплывающая подсказка с деталями задачи, а также вертикальные и горизонтальные направляющие для удобства навигации.
+- **Автоматическое суммирование часов** – подсчет часов по дням и общее количество за месяц с цветовой индикацией (зелёный – норма, красный – недостаточно часов).
+- **Уведомления через Toast** – использование `react-toastify` для отображения статусов загрузки, успешного сохранения и ошибок.
+- **Переключение месяца/года** – компонент `MonthYearSwitch` позволяет выбирать любой месяц и год для просмотра и редактирования данных.
+- **Адаптивный дизайн** – интерфейс корректно отображается на различных разрешениях экрана.
 
 ---
 
 ## 🧩 Технологии
 
-- **React 18+**, **TypeScript**
-- **TailwindCSS** для стилизации
-- **React Toastify** для уведомлений
-- **Power Apps & MS Graph API** для данных пользователя
-- **OData фильтры** для запросов проектов и часов
+- **Frontend:** React 18+, TypeScript, Vite
+- **Стилизация:** TailwindCSS, PostCSS
+- **Уведомления:** React Toastify
+- **Интеграция с Power Apps:** `@microsoft/power-apps` SDK, MS Graph API
+- **Запросы данных:** OData фильтры к SharePoint спискам
+- **Сборка и разработка:** ESLint, TypeScript, авто-генерация моделей и сервисов
 
 ---
 
+## 🏗️ Архитектура и поток данных
 
-## 📄 Краткое описание файлов
+### Общая схема
+
+1. **Загрузка пользователя** – хук `useUser` получает профиль и фото текущего пользователя через MS Graph API.
+2. **Загрузка проектов и задач** – хук `useTimeSheetData` запрашивает:
+   - Назначенные проекты из списка `Projects_assignment` (фильтр по email пользователя).
+   - Задачи из списка `Tasks` (фильтр по ID проекта).
+   - Уже введённые часы из списка `TimeEntries` (фильтр по email и выбранному месяцу).
+3. **Построение иерархии** – функция `buildProjects` группирует задачи по проектам и присоединяет к ним time entries.
+4. **Рендеринг таблицы** – компонент `TimeSheetTable` отображает проекты, задачи и ячейки дней месяца.
+5. **Взаимодействие с ячейкой** – клик по ячейке открывает `AddTimeEntryPopup`, где пользователь вводит часы и комментарий.
+6. **Сохранение** – хук `useSaveData` отправляет новую запись в SharePoint и обновляет локальное состояние.
+7. **Визуальные улучшения** – `HoverCellPopup` и `HoverGuidlines` обеспечивают навигационные подсказки.
+
+### Ключевые хуки и сервисы
+
+- `useUser` – управление данными пользователя (профиль, фото).
+- `useTimeSheetData` – загрузка и агрегация данных для выбранного месяца.
+- `useSaveData` – отправка новых записей часов.
+- `useTimeEntries` (в UI) – локальное управление состоянием time entries.
+- Сгенерированные сервисы (`TasksService`, `Projects_assignmentService`, `TimeEntriesService`) – низкоуровневые OData-запросы.
+
+---
+
+## 📁 Структура проекта
+
+```
+time-tracker-PA/
+├── public/                 # Статические ресурсы
+├── src/
+│   ├── App.tsx            # Корневой компонент приложения, роутинг страниц
+│   ├── main.tsx           # Точка входа (React + Vite)
+│   ├── index.css          # Глобальные стили Tailwind
+│   ├── constants/table.ts # Константы таблицы (таймауты, цвета и т.д.)
+│   ├── generated/         # Авто-сгенерированные модели и сервисы OData
+│   │   ├── models/
+│   │   │   ├── CommonModels.ts
+│   │   │   ├── Office365UsersModel.ts
+│   │   │   ├── Projects_assignmentModel.ts
+│   │   │   ├── Projects_codeModel.ts
+│   │   │   ├── TasksModel.ts
+│   │   │   └── TimeEntriesModel.ts
+│   │   └── services/
+│   │       ├── Office365UsersService.ts
+│   │       ├── Projects_assignmentService.ts
+│   │       ├── Projects_codeService.ts
+│   │       ├── TasksService.ts
+│   │       └── TimeEntriesService.ts
+│   ├── pages/             # Страницы приложения
+│   │   ├── AboutPage/     # Страница «О приложении»
+│   │   ├── TimeSheetPage/ # Основная страница таймшита
+│   │   ├── TimeSheetEntries/ # Страница отчётов (в разработке)
+│   │   └── WelcomePage/   # Приветственная страница
+│   ├── shared/            # Общие модули
+│   │   ├── api/           # React-хуки для работы с данными
+│   │   │   ├── useUser.ts
+│   │   │   ├── useTimeSheetData.ts
+│   │   │   ├── useSaveData.ts
+│   │   │   ├── useGetTimeEnries.ts
+│   │   │   └── useTimeSheetDataBackUp.ts
+│   │   ├── hooks/         # Кастомные хуки UI
+│   │   │   └── useTimeEntries.ts
+│   │   ├── types/         # Общие типы TypeScript
+│   │   │   └── sharedtypes.ts
+│   │   ├── utils/         # Вспомогательные функции
+│   │   │   ├── GetDate.ts          # Генерация дней месяца с днями недели
+│   │   │   ├── calculateCoordinates.ts # Расчёт координат для попапов
+│   │   │   └── loadingTimeOut.ts   # Утилита таймаута загрузки
+│   │   └── sceletonLoading/ # Компоненты-скелетоны
+│   │       ├── LoaderTable.tsx
+│   │       └── LoaderTasks.tsx
+│   └── widgets/           # Переиспользуемые UI-компоненты
+│       ├── Header/        # Шапка приложения (пользователь, навигация)
+│       ├── Footer/        # Подвал (ссылки, переключение страниц)
+│       └── TimeSheetTable/ # Вся логика таблицы таймшита
+│           ├── TimeSheetTable.tsx          # Основная таблица
+│           ├── TimeSheetRowTask.tsx        # Строка задачи
+│           ├── timsSheetRowProject.tsx     # Строка проекта (группировка задач)
+│           └── components/                 # Вспомогательные компоненты таблицы
+│               ├── AddTimeEntryPopup.tsx   # Попап ввода часов
+│               ├── HoverCellPopup.tsx      # Подсказка при наведении
+│               ├── HoverGuidlines.tsx      # Вертикальные/горизонтальные гайдлайны
+│               └── MonthYearSwitch.tsx     # Переключатель месяца/года
+├── docs/                  # Документация, скриншоты
+├── package.json           # Зависимости и скрипты
+├── vite.config.ts         # Конфигурация Vite
+├── tailwind.config.js     # Конфигурация Tailwind
+└── README.md              # Этот файл
+```
+
+### 🔹 Краткое описание ключевых файлов
 
 | Путь | Назначение |
 |------|------------|
-| `src/App.tsx` | Главный компонент приложения. Подключает Header, Footer, TimeSheetPage, ToastContainer |
-| `src/main.tsx` | Точка входа в приложение (React + Vite) |
-| `src/index.css` | Глобальные стили, Tailwind |
-| `src/constants/table.ts` | Константы и конфигурации таблицы таймшита |
-| `src/generated/models/*.ts` | Типы моделей данных (Tasks, Projects, Users, TimeEntries) |
-| `src/generated/services/*.ts` | Сервисы для работы с API (OData) |
-| `src/pages/TimeSheetPage/TimeSheetPage.tsx` | Страница таймшита, оборачивает TimeSheetTable |
-| `src/shared/api/useTimeSheetData.ts` | Хук для загрузки и обработки данных таймшита |
-| `src/shared/api/useSaveData.ts` | Хук для сохранения введенных часов |
-| `src/shared/api/useUser.ts` | Хук для получения информации о пользователе |
-| `src/shared/hooks/useTimeEntries.ts` | Хук для работы с TimeEntries в UI |
-| `src/shared/utils/GetDate.ts` | Утилита для получения дней месяца с днями недели |
-| `src/shared/utils/calculateCoordinates.ts` | Утилита для вычисления координат курсора в таблице |
-| `src/shared/types/sharedtypes.ts` | Общие типы и интерфейсы (PopupData, days и др.) |
-| `src/widgets/Header/Header.tsx` | Компонент шапки приложения, отображение пользователя |
-| `src/widgets/Footer/Footer.tsx` | Компонент подвала |
-| `src/widgets/TimeSheetTable/TimeSheetTable.tsx` | Основная таблица таймшита, объединяет строки и попапы |
-| `src/widgets/TimeSheetTable/TimeSheetRowTask.tsx` | Компонент строки задачи |
-| `src/widgets/TimeSheetTable/timsSheetRowProject.tsx` | Компонент строки проекта (группировка задач) |
-| `src/widgets/TimeSheetTable/components/AddTimeEntryPopup.tsx` | Попап для добавления часов |
-| `src/widgets/TimeSheetTable/components/HoverCellPopup.tsx` | Подсказка при наведении на ячейку |
-| `src/widgets/TimeSheetTable/components/HoverGuidlines.tsx` | Вертикальные и горизонтальные гайдлайны при наведении |
-| `src/widgets/TimeSheetTable/components/MonthYearSwitch.tsx` | Компонент переключения месяца/года |
+| `src/App.tsx` | Главный компонент приложения. Определяет текущую страницу на основе состояния `currentPage`, отображает Header, Footer и ToastContainer. |
+| `src/pages/TimeSheetPage/TimeSheetPage.tsx` | Страница таймшита. Управляет состоянием месяца/года, вызывает хук `useTimeSheetData` и рендерит `TimeSheetTable` или скелетон. |
+| `src/shared/api/useTimeSheetData.ts` | Хук для загрузки и агрегации данных таймшита. Выполняет три OData-запроса (проекты, задачи, time entries) и строит иерархию проектов. |
+| `src/shared/api/useUser.ts` | Хук для получения профиля и фотографии текущего пользователя через MS Graph API. Использует `Office365UsersService`. |
+| `src/shared/api/useSaveData.ts` | Хук для сохранения введённых часов. Отправляет POST-запрос к SharePoint списку `TimeEntries`. |
+| `src/shared/utils/GetDate.ts` | Утилита, возвращающая массив дней выбранного месяца с метаданными (день недели, выходной, дата в формате YYYY-MM-DD). |
+| `src/shared/types/sharedtypes.ts` | Общие типы TypeScript: `Project`, `Task`, `TimeEntry`, `PopupData`, `days` и др. |
+| `src/widgets/TimeSheetTable/TimeSheetTable.tsx` | Основная таблица таймшита. Рендерит заголовок, строки проектов/задач, футер с суммами, управляет попапами и hover-эффектами. |
+| `src/widgets/TimeSheetTable/components/AddTimeEntryPopup.tsx` | Модальное окно для ввода часов и комментария. Позиционируется относительно кликнутой ячейки. |
+| `src/widgets/TimeSheetTable/components/HoverGuidlines.tsx` | Компонент, рисующий вертикальную и горизонтальную направляющие при наведении мыши на таблицу. |
+| `src/widgets/TimeSheetTable/components/MonthYearSwitch.tsx` | Переключатель месяца и года с выпадающими списками. |
 
-### 🔹 Как это выглядит логически
+---
 
-- **App.tsx** — основной контейнер приложения  
-- **pages/TimeSheetPage** — страница таймшита  
-- **widgets/Header, Footer** — шапка и футер  
-- **widgets/TimeSheetTable** — вся логика таблицы и её строки  
-- **shared/api** — функции работы с данными (API)  
-- **shared/hooks** — кастомные React-хуки  
-- **shared/utils** — утилиты, например, для расчета координат и дней месяца  
-- **generated/** — сгенерированные модели и сервисы OData  
+## 🛠️ Установка и запуск
 
+### Предварительные требования
+
+- Node.js (версия 18 или выше)
+- npm или yarn
+- Доступ к Power Apps среде с настроенными SharePoint списками:
+  - `Projects_assignment`
+  - `Tasks`
+  - `TimeEntries`
+  - `Office365Users`
+
+### Шаги
+
+1. **Клонирование репозитория**
+   ```bash
+   git clone <repository-url>
+   cd time-tracker-PA
+   ```
+
+2. **Установка зависимостей**
+   ```bash
+   npm install
+   ```
+
+3. **Запуск в режиме разработки**
+   ```bash
+   npm run dev
+   ```
+   Приложение будет доступно по адресу `http://localhost:5173`.
+
+4. **Запуск через Power Apps** (рекомендуется для полной интеграции)
+   - Убедитесь, что Power Apps CLI установлен.
+   - Выполните:
+     ```bash
+     npx power-apps run
+     ```
+   - Откройте локальную сессию в Power Apps Studio.
+
+5. **Сборка для production**
+   ```bash
+   npm run build
+   ```
+   Собранные файлы появятся в папке `dist`.
+
+---
+
+## 📝 Разработка
+
+### Генерация моделей и сервисов
+
+Модели и сервисы OData генерируются автоматически с помощью инструментов Power Apps. При изменении схемы SharePoint списков необходимо перегенерировать файлы в папке `src/generated/`.
+
+### Добавление нового функционала
+
+1. **Новый хук API** – создайте файл в `src/shared/api/` по образцу `useTimeSheetData.ts`.
+2. **Новый компонент** – разместите в соответствующей папке (`widgets/`, `pages/`, `shared/`).
+3. **Типы** – расширьте `sharedtypes.ts` или создайте новый файл в `src/shared/types/`.
+4. **Стили** – используйте Tailwind-классы; при необходимости добавьте кастомные стили в `index.css`.
+
+### Линтинг и форматирование
+
+- Проверка кода: `npm run lint`
+- Форматирование (если настроен Prettier) – рекомендуется настроить в IDE.
+
+---
+
+## 🐛 Известные ограничения
+
+- Приложение предназначено для использования внутри Power Apps, поэтому некоторые функции (например, аутентификация) зависят от контекста Power Apps.
+- Вне Power Apps приложение может работать в ограниченном режиме (например, без данных пользователя).
+- Поддержка только одного месяца за раз; навигация по годам возможна через `MonthYearSwitch`.
+- Нет офлайн-режима; все изменения сразу сохраняются в SharePoint.
+
+---
+
+## 📄 Лицензия
+
+Внутренний проект компании AwaraPP. Распространяется под внутренней лицензией.
+
+---
+
+## 🤝 Участие в разработке
+
+1. Создайте форк репозитория.
+2. Создайте ветку для вашей функции (`git checkout -b feature/amazing-feature`).
+3. Внесите изменения и закоммитьте (`git commit -m 'Add some amazing feature'`).
+4. Запушьте в ветку (`git push origin feature/amazing-feature`).
+5. Откройте Pull Request.
+
+---
+
+*Последнее обновление: март 2026*

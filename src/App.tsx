@@ -1,8 +1,8 @@
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/widgets/Header/Header";
 import TimeSheetPage from "@/pages/TimeSheetPage/TimeSheetPage";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import useUser from "@/shared/api/useUser";
 import Footer from "@/widgets/Footer/Footer";
 import TimeSheetEntries from "@/pages/TimeSheetEntries/TimeSheetEntries";
