@@ -39,7 +39,7 @@ export default function TimeSheetRowTask({
   return (
     <>
       <tr className="bg-white ">
-        <td className="border-b border-r border-slate-300 sticky left-0 bg-white p-2 pl-8  border-l border-slate-300  z-10">
+        <td className="border-b border-r border-slate-300 sticky left-0 bg-white p-2 pl-8  border-l border-slate-300 ">
           <div className="flex justify-between gap-1 items-center">
             {task.title}{" "}
             <div className="relative">
@@ -58,10 +58,10 @@ export default function TimeSheetRowTask({
               >
                 <ul className="flex flex-col space-y-1 py-1 min-w-[120px] overflow-hidden">
                   <li className="px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer transition-colors duration-150">
-                    Edit
+                    Hide 
                   </li>
                   <li className="px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer transition-colors duration-150">
-                    Delete
+                    Show Info
                   </li>
                 </ul>
               </PortalDropdown>
