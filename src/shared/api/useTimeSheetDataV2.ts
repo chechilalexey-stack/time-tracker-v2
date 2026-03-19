@@ -1,26 +1,27 @@
 import { useEffect, useState, useMemo } from "react";
 import { toast } from "react-toastify";
-import { TasksService } from "@/generated";
-import type { TasksRead } from "@/generated/models/TasksModel";
+//import { TasksService } from "@/generated";
+//import type { TasksRead } from "@/generated/models/TasksModel";
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import { Projects_assignmentService } from "@/generated";
 import type { Projects_assignmentRead } from "@/generated/models/Projects_assignmentModel";
-import { TimeEntriesService } from "@/generated";
-import type { TimeEntriesRead } from "@/generated/models/TimeEntriesModel";
-import type { Task, TimeEntry, Project } from "@/shared/types/sharedtypes";
+//import { TimeEntriesService } from "@/generated";
+//import type { TimeEntriesRead } from "@/generated/models/TimeEntriesModel";
+//import type { Task, TimeEntry, Project } from "@/shared/types/sharedtypes";
 import withTimeout from "@/shared/utils/loadingTimeOut";
-import { TIME_OUT_GET_DATA } from "@/constants/table";
+import { TIME_OUT_GET_DATA } from "@/constants/constants";
 type Props = {
   userProfile?: GraphUser_V1;
   startDate: string;
   endDate: string;
 };
-const [assignedTasks, setAssignedTasks] = useState<TasksRead[]>([]);
-const [timeEntries, setTimeEntries] = useState<TimeEntriesRead[]>([]);
-const [loadingProjects, setLoadingProjects] = useState(true);
-const [loadingTasks, setLoadingTasks] = useState(true);
-const [loadingProfile, setLoadingProfile] = useState(true);
-const [assignedProjects,setAssignedProjects] = useState<Projects_assignmentRead[]>([]);
+///const [assignedTasks, setAssignedTasks] = useState<TasksRead[]>([]);
+//const [timeEntries, setTimeEntries] = useState<TimeEntriesRead[]>([]);
+//const [loading, setLoading] = useState(true);
+
+const [assignedProjects, setAssignedProjects] = useState<
+  Projects_assignmentRead[]
+>([]);
 export default function useTimeSheetDataV2({
   userProfile,
   startDate,
@@ -47,10 +48,15 @@ export default function useTimeSheetDataV2({
           },
         );
         if (controller.signal.aborted) return;
-        setAssignedProjects(projects.data)
+        setAssignedProjects(projects.data);
       } catch (error) {
         toast.error("Не удалось загрузить проекты");
       }
     };
-  });
+
+    fetchAssignedProjects();
+    return () => {
+      controller.abort();
+    };
+  }, []);
 }

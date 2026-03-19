@@ -1,6 +1,7 @@
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import type { page } from "@/shared/types/sharedtypes";
 import getInitials from "@/shared/utils/getInitials";
+import {MENU_ITEMS} from "@/constants/constants";
 type Props = {
   userProfile?: GraphUser_V1;
   loading?: boolean;
@@ -19,25 +20,18 @@ export default function Header({
 
       <nav>
         <ul className="flex space-x-4 list-disk">
-          <li
-            onClick={() => setCurrentPage("main")}
+{MENU_ITEMS.map((item) =>(
+  <li
+            onClick={() => setCurrentPage(item.page)}
             className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
           >
-            <button>Главная</button>
+            <button>{item.title}</button>
           </li>
-          <li
-            onClick={() => setCurrentPage("log")}
-            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white "
-          >
-            <button>Лог времени</button>
-          </li>
-          <li
-            onClick={() => setCurrentPage("report")}
-            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
-          >
-            <button>Отчёты</button>
-          </li>
-        </ul>{" "}
+  
+))}
+          
+   
+        </ul>
       </nav>
       {loading ? (
         <div className="flex items-center justify-end space-x-4 w-100">

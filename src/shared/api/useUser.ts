@@ -3,7 +3,7 @@ import { Office365UsersService } from "@/generated/services/Office365UsersServic
 import type { GraphUser_V1 } from "@/generated/models/Office365UsersModel";
 import { toast } from "react-toastify";
 import withTimeout from "@/shared/utils/loadingTimeOut";
-import { TIME_OUT_GET_DATA } from "@/constants/table";
+import { TIME_OUT_GET_DATA } from "@/constants/constants";
 
 export default function useUser() {
   // состояние профиля пользователя

@@ -1,4 +1,4 @@
-import { MONTHS_NAMES } from "@/constants/table";
+import { MONTHS_NAMES } from "@/constants/constants";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
