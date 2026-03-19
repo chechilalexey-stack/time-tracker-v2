@@ -46,7 +46,7 @@ export default function TimeSheetRowProject({
     <tbody key={project.id} className="bg-white mb-2  ">
       <tr className="bg-gray-100">
         <td
-          className="sticky left-0 bg-gray-200 border-t  p-2 font-semibold cursor-pointer hover:bg-gray-300 border-l border-b border-r border-slate-300"
+          className="sticky left-0 bg-gray-200 border-t  p-2 font-semibold cursor-pointer hover:bg-gray-300 border-l border-b border-r border-slate-300 z-10"
           onClick={() => toggleProject(project.id!)}
         >
           <span className="inline-flex items-center gap-2 min-w-40">
@@ -72,7 +72,7 @@ export default function TimeSheetRowProject({
             />
           </td>
         ))}
-        <td className="border-b border-r border-t text-white border-slate-800 p-2 text-center bg-gray-700 sticky right-0 font-semibold">
+        <td className="border-b border-r border-t text-white border-slate-800 p-2 text-center bg-gray-700 sticky right-0 font-semibold z-10">
           {timeEntries.filter((entry) => entry.projectId === project.id).
           reduce((acc, entry) => acc + (entry.hours || 0), 0)}
         </td>
